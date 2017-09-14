@@ -1,7 +1,7 @@
 {
   "swagger" : "2.0",
   "info" : {
-    "description" : "The karmadata API provides ReST access to public and private clouds of data, with the ability to link related data entities and to do everything from simple searches, complex filters (grouped filter logic), location and text based filters, and analytics by grouping different datasets.  You can also create and query your own datasets and entities using our Modify API, or via bulk upload, in order to unlock hidden datasets and maximize their value.",
+    "description" : "The karmadata API provides ReST access to public and private clouds of data, with the ability to link related data entities and to do everything from simple searches, complex filters (grouped filter logic), location and text based filters, and analytics by grouping different datasets.  You can also create and query your own datasets and entities using our Modify API, or via bulk upload, in order to unlock hidden datasets and maximize their values.",
     "version" : "1.0.0",
     "title" : "Kd Medicare API",
     "contact" : {
