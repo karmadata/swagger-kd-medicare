@@ -1,8 +1,11 @@
 {
-  "swagger" : "2.0",
+  "openapi" : "3.0.0",
+  "servers" : [ {
+    "url" : "https://qa-api.karmadata.com/"
+  } ],
   "info" : {
-    "description" : "The karmadata API provides ReST access to public and private clouds of data, with the ability to link related data entities and to do everything from simple searches, complex filters (grouped filter logic), location and text based filters, and analytics by grouping different datasets.  You can also create and query your own datasets and entities using our Modify API, or via bulk upload, in order to unlock hidden datasets and maximize their value.",
-    "version" : "1.0.0",
+    "description" : "The karmadata API provides ReST access to public and private clouds of data, with the ability to link related data entities and to do everything from simple searches, complex filters (grouped filter logic), location and text based filters, and analytics by grouping different datasets.  You can also create and query your own datasets and entities using our Modify API, or via bulk upload, in order to unlock hidden datasets and maximize their value",
+    "version" : "1.0.0-oas3",
     "title" : "Kd Medicare API",
     "contact" : {
       "email" : "sean.power@karmadata.com"
@@ -16,8 +19,6 @@
     "name" : "Plans",
     "description" : "Obtain data on Medicare Plans, Formularies, drug costs and out of pocket trends"
   } ],
-  "schemes" : [ "https" ],
-  "host" : "qa-api.karmadata.com",
   "paths" : {
     "/Healthcare/MedicarePlans" : {
       "post" : {
@@ -25,19 +26,13 @@
         "summary" : "Obtain data on Medicare Plans and Formularies",
         "operationId" : "plansPost",
         "description" : ".",
-        "produces" : [ "application/json" ],
         "parameters" : [ {
           "in" : "query",
           "name" : "apiKey",
           "description" : "Pass an apiKey (use 1CBBDA20E5394CB7A8384CCA8FA0B9B6 for testing) for simple auth. Production authorization requires registration and use of OAuth and Bearer Tokens.",
           "required" : true,
-          "type" : "string"
-        }, {
-          "in" : "body",
-          "name" : "data",
-          "description" : "An object that contains the parameters used to request data on Medicare Plans",
           "schema" : {
-            "$ref" : "#/definitions/MedicarePlanApiPostBody"
+            "type" : "string"
           }
         } ],
         "responses" : {
@@ -47,44 +42,56 @@
           "401" : {
             "description" : "unauthorized"
           }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/MedicarePlanApiPostBody"
+              }
+            }
+          },
+          "description" : "An object that contains the parameters used to request data on Medicare Plans"
         }
       }
     }
   },
-  "definitions" : {
-    "MedicarePlanApiPostBody" : {
-      "type" : "object",
-      "description" : "A wrapping object for the list of RequestItems.",
-      "properties" : {
-        "pharmacyNPI" : {
-          "description" : "The NPI of the pharmacy that is requesting plan data (each pharmacy has different pricing based upon it's contract with each Medicare Plan)",
-          "type" : "string",
-          "example" : "1417329228"
-        },
-        "rxNormDaysSupply" : {
-          "description" : "An array of strings in the format of RxNorm|Days Supply|Quantity.  KD provides a Search API for drugs via RxNorm at api.karmdata.com/Search/KdDrugRxNorm.  See separate KD Search API Swagger for documentation.  Days Supply are normalized to 30, 60, 90.  Quantity is used to cost the drugs out based on current drug pricing info.",
-          "type" : "array",
-          "example" : [ "206160|30|30", "617314|30|30", "861007|30|30", "200034|60|30", "1000005|30|30" ]
-        },
-        "zipCode" : {
-          "description" : "Medicare Plans are available to consumers based on the consumer's zip code (and county).  If no zipCode is passed in, the zipCode of the Pharmacy is used.",
-          "type" : "string",
-          "example" : ""
-        },
-        "medicaidLevel" : {
-          "description" : "An integer reflecting the level of dual eligiblity for Medicaid and subsidies available (0 = not, 1=partial $2.95/$7.40 copays 2016, 2= $1.20/$3.60 copays 2016).",
-          "type" : "integer",
-          "example" : 0
-        },
-        "lowIncomePremiumSubsidy" : {
-          "description" : "A number reflecting the level of SSDI Low Income Subsidy ( 0 - Partial SSDI (15% co-insurance, 0% of Premiums) 25 - Partial SSDI (15% co-insurance, 25% of Premiums) 50 - Partial SSDI (15% co-insurance, 50% of Premiums) 75 - Partial SSDI (15% co-insurance, 75% of Premiums) 100 -Full SSDI ($2.95/$7.40 copays in 2016)",
-          "type" : "integer",
-          "example" : 0
-        },
-        "startMonth" : {
-          "description" : "1 based month that Patient enrolls in plan.  Default is 1 Jan",
-          "type" : "integer",
-          "example" : 1
+  "components" : {
+    "schemas" : {
+      "MedicarePlanApiPostBody" : {
+        "type" : "object",
+        "description" : "A wrapping object for the list of RequestItems.",
+        "properties" : {
+          "pharmacyNPI" : {
+            "description" : "The NPI of the pharmacy that is requesting plan data (each pharmacy has different pricing based upon it's contract with each Medicare Plan)",
+            "type" : "string",
+            "example" : "1710080536"
+          },
+          "rxNormDaysSupply" : {
+            "description" : "An array of strings in the format of RxNorm|Days Supply|Quantity.  KD provides a Search API for drugs via RxNorm at api.karmdata.com/Search/KdDrugRxNorm.  See separate KD Search API Swagger for documentation.  Days Supply are normalized to 30, 60, 90.  Quantity is used to cost the drugs out based on current drug pricing info.",
+            "type" : "array",
+            "example" : [ "206160|30|30", "617314|30|30", "861007|30|30", "200034|60|30", "1000005|30|30" ]
+          },
+          "zipCode" : {
+            "description" : "Medicare Plans are available to consumers based on the consumer's zip code (and county).  If no zipCode is passed in, the zipCode of the Pharmacy is used.",
+            "type" : "string",
+            "example" : ""
+          },
+          "medicaidLevel" : {
+            "description" : "An integer reflecting the level of dual eligiblity for Medicaid and subsidies available (0 = not, 1=partial $2.95/$7.40 copays 2016, 2= $1.20/$3.60 copays 2016).",
+            "type" : "integer",
+            "example" : 0
+          },
+          "lowIncomePremiumSubsidy" : {
+            "description" : "A number reflecting the level of SSDI Low Income Subsidy ( 0 - Partial SSDI (15% co-insurance, 0% of Premiums) 25 - Partial SSDI (15% co-insurance, 25% of Premiums) 50 - Partial SSDI (15% co-insurance, 50% of Premiums) 75 - Partial SSDI (15% co-insurance, 75% of Premiums) 100 -Full SSDI ($2.95/$7.40 copays in 2016)",
+            "type" : "integer",
+            "example" : 0
+          },
+          "startMonth" : {
+            "description" : "1 based month that Patient enrolls in plan.  Default is 1 Jan",
+            "type" : "integer",
+            "example" : 1
+          }
         }
       }
     }
